@@ -16,6 +16,16 @@ The vehicle should:
 6. resume or abort according to configured policy,
 7. log trajectory and localization-health metrics.
 
+## Validation snapshot
+
+The current software-level validation passes **10/10 unit tests** and completes a deterministic closed-loop waypoint mission with an intentionally injected **3-second VIO dropout**. During localization loss, the controller enters HOLD; navigation resumes after localization is restored.
+
+![Synthetic mission trajectory](results/figures/trajectory_validation.svg)
+
+![Waypoint error and VIO dropout](results/figures/error_dropout_validation.svg)
+
+See [`docs/VALIDATION.md`](docs/VALIDATION.md) for the test output, metrics, interpretation, and limitations.
+
 ## Architecture
 
 ```text
@@ -73,6 +83,13 @@ source install/setup.bash
 
 ```bash
 python3 -m pytest -q
+```
+
+Expected current result:
+
+```text
+..........                                                               [100%]
+10 passed in 0.03s
 ```
 
 ## Run mission
