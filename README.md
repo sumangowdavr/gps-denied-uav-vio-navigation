@@ -16,15 +16,49 @@ The vehicle should:
 6. resume or abort according to configured policy,
 7. log trajectory and localization-health metrics.
 
-## Validation snapshot
+## Validation dashboard
 
-The current software-level validation passes **10/10 unit tests** and completes a deterministic closed-loop waypoint mission with an intentionally injected **3-second VIO dropout**. During localization loss, the controller enters HOLD; navigation resumes after localization is restored.
+Current software-level validation uses a deterministic closed-loop mission with an intentionally injected **3-second VIO dropout**. The controller detects localization loss, transitions to **HOLD**, sends zero velocity while localization is unavailable, then resumes navigation after localization recovers.
+
+| Validation item | Result |
+|---|---:|
+| Unit tests | **10 / 10 passed** |
+| Mission completion | **PASS** |
+| Injected VIO dropout | **3.0 s** |
+| Failsafe response | **HOLD** |
+| Hold duration | **3.0 s** |
+| Recovery after localization returns | **PASS** |
+| Mission completion time | **25.4 s** |
+| Final altitude | **2.00 m** |
+| Final XY offset from home | **~0.116 m** |
+
+### 3D mission behavior
+
+![3D trajectory and failsafe](results/figures/trajectory_3d.svg)
+
+The path visualization shows takeoff, waypoint traversal, and the location where the localization-loss failsafe is exercised.
+
+### Mission state-machine response
+
+![Mission state timeline](results/figures/mission_state_timeline.svg)
+
+This timeline makes the safety behavior explicit: **TAKEOFF → NAVIGATE → HOLD → NAVIGATE → COMPLETE**.
+
+### Closed-loop waypoint error distribution
+
+![Waypoint error CDF](results/figures/error_cdf.svg)
+
+The cumulative-error plot provides a distribution-level view rather than relying on only a single average error value.
+
+### Original trajectory and dropout plots
 
 ![Synthetic mission trajectory](results/figures/trajectory_validation.svg)
 
 ![Waypoint error and VIO dropout](results/figures/error_dropout_validation.svg)
 
-See [`docs/VALIDATION.md`](docs/VALIDATION.md) for the test output, metrics, interpretation, and limitations.
+See [`docs/VALIDATION.md`](docs/VALIDATION.md) for test output, metrics, interpretation, and limitations.
+
+> These plots are **software-level synthetic closed-loop validation**, not Gazebo/PX4 or hardware results. Simulator ground-truth vs VIO plots will replace/extend them in the next milestone.
 
 ## Architecture
 
