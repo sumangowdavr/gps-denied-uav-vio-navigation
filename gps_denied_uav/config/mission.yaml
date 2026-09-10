@@ -1,0 +1,16 @@
+gps_denied_mission:
+  ros__parameters:
+    waypoints: [0.0,0.0,2.0, 3.0,0.0,2.0, 3.0,3.0,2.0, 0.0,3.0,2.0, 0.0,0.0,2.0]
+    kp_xy: 0.8
+    kp_z: 0.8
+    max_xy_speed: 1.0
+    max_z_speed: 0.5
+    position_tolerance: 0.20
+    max_pose_age_s: 0.30
+    max_jump_m: 1.50
+    recovery_timeout_s: 5.0
+    waypoint_hold_s: 0.75
+    control_rate_hz: 20.0
+trajectory_logger:
+  ros__parameters:
+    output_dir: results
